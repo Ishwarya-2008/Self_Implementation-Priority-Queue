@@ -1,4 +1,5 @@
-package MiniProject;
+package taskmanager;
+
 import java.util.Arrays;
 
 class PriorityQueues<T extends Comparable<T>> {
@@ -24,12 +25,7 @@ class PriorityQueues<T extends Comparable<T>> {
     private void ensureCapacity() {
         if (size == capacity) {
             capacity *= 2;
-            @SuppressWarnings("unchecked")
-            T[] newHeap = (T[]) new Comparable[capacity];
-            for (int i = 0; i < size; i++) {
-                newHeap[i] = heap[i];
-            }
-            heap = newHeap;
+            heap = Arrays.copyOf(heap, capacity);
         }
     }
 
@@ -46,20 +42,20 @@ class PriorityQueues<T extends Comparable<T>> {
     }
 
     public T peek() {
-        if (size == 0){
+        if (size == 0) {
             throw new RuntimeException("Queue is empty");
         }
         return heap[0];
     }
 
     public T poll() {
-        if (size == 0){
+        if (size == 0) {
             throw new RuntimeException("Queue is empty");
         }
         T root = heap[0];
         heap[0] = heap[size - 1];
         size--;
-        if (size > 0){
+        if (size > 0) {
             heapDown(0);
         }
         return root;
@@ -73,8 +69,8 @@ class PriorityQueues<T extends Comparable<T>> {
                 heap[index] = heap[parent];
                 heap[parent] = temp;
                 index = parent;
-            } else{
-                 break;
+            } else {
+                break;
             }
         }
     }
@@ -85,16 +81,16 @@ class PriorityQueues<T extends Comparable<T>> {
             int right = 2 * index + 2;
             int smallest = index;
 
-            if (left < size && heap[left].compareTo(heap[smallest]) < 0){
+            if (left < size && heap[left].compareTo(heap[smallest]) < 0) {
                 smallest = left;
             }
 
-            if (right < size && heap[right].compareTo(heap[smallest]) < 0){
+            if (right < size && heap[right].compareTo(heap[smallest]) < 0) {
                 smallest = right;
             }
 
-            if (smallest == index){
-                 break;
+            if (smallest == index) {
+                break;
             }
 
             T temp = heap[index];
@@ -113,7 +109,7 @@ class PriorityQueues<T extends Comparable<T>> {
             }
         }
 
-        if (index == -1){
+        if (index == -1) {
             return false;
         }
 
@@ -141,18 +137,18 @@ class PriorityQueues<T extends Comparable<T>> {
 
     @Override
     public String toString() {
-    if (size == 0) {
-        return "[]";
-    }
-
-    String result = "[";
-
-    for (int i = 0; i < size; i++) {
-        result += heap[i];
-        if (i < size - 1) {
-            result += ", ";
+        if (size == 0) {
+            return "[]";
         }
-    }
+
+        String result = "[";
+
+        for (int i = 0; i < size; i++) {
+            result += heap[i];
+            if (i < size - 1) {
+                result += ", ";
+            }
+        }
 
         result += "]";
         return result;
@@ -163,6 +159,7 @@ class PriorityQueues<T extends Comparable<T>> {
     }
 
     private class HeapIterator implements Iterators<T> {
+
         private int cursor = 0;
 
         @Override
@@ -172,7 +169,7 @@ class PriorityQueues<T extends Comparable<T>> {
 
         @Override
         public T next() {
-            if (!hasNext()){
+            if (!hasNext()) {
                 throw new RuntimeException("No more elements");
             }
             return heap[cursor++];
@@ -181,7 +178,7 @@ class PriorityQueues<T extends Comparable<T>> {
 
     public boolean contains(T value) {
         for (int i = 0; i < size; i++) {
-            if (heap[i].equals(value)){
+            if (heap[i].equals(value)) {
                 return true;
             }
         }
@@ -195,6 +192,8 @@ class PriorityQueues<T extends Comparable<T>> {
 }
 
 interface Iterators<T> {
+
     boolean hasNext();
+
     T next();
 }
